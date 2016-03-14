@@ -1,3 +1,8 @@
+/*
+ * Tool to update, set and clear salesforce.com profiles and permission sets
+ * https://github.com/wojdyga/sfdc-profile-updater
+ */
+
 import scala.xml._
 import scala.io.Source
 
