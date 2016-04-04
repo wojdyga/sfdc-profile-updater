@@ -1,0 +1,17 @@
+<apex:page controller="ProjectDisplayController">
+    <apex:pageBlock title="Strona projektu" mode="edit" tabStyle="Case">
+        <apex:pageBlockButtons >
+        </apex:pageBlockButtons>
+        <apex:pageBlockSection title="Informacje o projekcie" columns="2">
+        	<apex:outputField value="{!record.Name}"/>
+            <apex:outputField value="{!record.Title__c}"/>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="Wydatki w projekcie">
+	        <apex:pageBlockTable value="{!record.Expenses__r}" var="item">
+	            <apex:column value="{!item.name}"/> 
+				<apex:column value="{!item.Price__c}"/>
+	        </apex:pageBlockTable> 
+        </apex:pageBlockSection>
+     </apex:pageBlock>
+     
+</apex:page>

@@ -1,0 +1,19 @@
+{
+    "username": "wojdygaa@tt.com.pl", 
+    "environment": "developer", 
+    "project_name": "devtest", 
+    "workspace": "C:\\Users\\awojdyga\\SFDC_WORKSPACE", 
+    "org_url": "", 
+    "namespace": "", 
+    "id": "73UJ2B6I4042701TQTZGBE44T7KHM6Z8", 
+    "metadata_container": "1dci0000000AtI3AAK", 
+    "subscription": [
+        "ApexClass", 
+        "ApexComponent", 
+        "ApexPage", 
+        "ApexTrigger", 
+        "CustomObject", 
+        "Profile", 
+        "StaticResource"
+    ]
+}

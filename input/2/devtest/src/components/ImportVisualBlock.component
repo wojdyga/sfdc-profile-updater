@@ -1,0 +1,9 @@
+<apex:component selfClosing="true" access="global">
+    <apex:attribute name="theme" type="String" description="Theme to be used, possible values 'superhero','lumen','default' and 'flatly'" access="global" required="false"/>
+    
+    <apex:variable var="themeName" value="{!IF(theme == 'flatly','-flatly',IF(theme == 'superhero','-superhero',IF(theme == 'lumen','-lumen','')))}"/>    
+    <apex:includeScript value="{!URLFOR($Resource.visualstrap, 'bootstrap/js/jquery-1.11.1.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.visualstrap, 'bootstrap/js/bootstrap.min.js')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.visualstrap, 'bootstrap/css/visualstrap'+themeName+'.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.visualstrap, 'bootstrap/css/visualstrap-common.css')}" />
+</apex:component>

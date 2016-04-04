@@ -1,0 +1,70 @@
+<apex:page controller="ActionTester">
+    <apex:includeScript value="https://code.jquery.com/jquery-2.1.4.min.js"/>
+    <apex:outputPanel id="all">
+    <apex:pageMessages id="messages" />
+    <apex:form >
+    <apex:commandButton value="Delete Words Without Translation" action="{!deleteUntranslated}" rerender="ts, messages" oncomplete="appendToLog('deleteUntranslated finished\n');"/>
+    <apex:outputPanel id="ts" layout="block">
+        <h2>All translations</h2>
+        <apex:repeat value="{!translations}" var="t">
+            <p>{!t} -> "{!translations[t]}"</p>
+        </apex:repeat>
+        <input id="singleBtn" type="button" value="Until rerender..." />
+    </apex:outputPanel>
+    <apex:outputPanel id="list">
+        <h2>Ordered translated words</h2>    
+        <apex:repeat value="{!orderedTranslations}" var="t">
+            <p>"{!t}"</p>
+        </apex:repeat>
+    </apex:outputPanel>
+    <apex:commandButton value="Order By Translation" action="{!orderTranslationsByValue}" rerender="list, messages, status" 
+                        oncomplete="appendToLog('orderTranslationsByValue finished\n');" status="status"/>
+    <p>
+        New Word <input id="newWordInput" type="text" /> New Translation <input type="text" id="newTransInput" />
+        <input id="putButton" type="button" value="Put Translation" />
+        
+        <apex:actionFunction action="{!putTranslation}" name="putTranslation" reRender="all" onbeforedomupdate="saveLogValue();" oncomplete="restoreLogValue(); appendToLog('putTranslation finished\n');">
+            <apex:param assignTo="{!newWord}" name="newWord" value="" />
+            <apex:param assignTo="{!newTrans}" name="newTrans" value="" />
+        </apex:actionFunction>
+    </p>
+    <p>
+    <textarea id="log">
+    </textarea>
+    </p>
+    <apex:outputPanel layout="block" style="border-style: solid; border-color: #98bf21;">
+    Click this panel &nbsp;
+        <apex:outputField value="{!testAccount.Name}"/>
+        <apex:outputText > {!clickCount}</apex:outpuTText>
+        <apex:actionSupport action="{!inc}" rerender="all, status" event="onclick"/>
+    </apex:outputPanel>
+    </apex:form>
+    </apex:outputPanel>
+    <apex:actionStatus id="status">
+        <apex:facet name="start"> Started ... clickCount={!clickCount}
+        </apex:facet>
+        <apex:facet name="stop"> Stopped.
+        </apex:facet>
+    </apex:actionStatus>
+    <script>
+        $j = jQuery.noConflict();
+        $j('#putButton').click(function(){
+            var w = $j('#newWordInput').val();
+            var t = $j('#newTransInput').val();
+            putTranslation(w, t);
+        });
+        $j('#singleBtn').click(function(){
+            console.log('This button works until rerender');
+        });
+        var logValue = '';
+        function saveLogValue() {
+            logValue = $j('#log').text();
+        }
+        function restoreLogValue() {
+            $j('#log').text(logValue);
+        }
+        function appendToLog(l) {
+            $j('#log').append(l);
+        }
+    </script>
+</apex:page>

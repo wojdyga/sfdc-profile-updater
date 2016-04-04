@@ -1,0 +1,8 @@
+<apex:page controller="ProjectDisplayController">
+     <apex:pageBlock title="Strona projektu" mode="edit" tabStyle="Case">
+         <apex:pageBlockSection title="Informacje o projekcie" columns="2">
+         	<apex:outputField value="{!record.Name}"/>
+             <apex:outputField value="{!record.Title__c}"/>
+         </apex:pageBlockSection>
+      </apex:pageBlock>
+</apex:page>
