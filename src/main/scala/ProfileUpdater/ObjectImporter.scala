@@ -29,7 +29,7 @@ class ObjectImporter(srcDirPath : String, objectName : String) {
 		List()
 	}
 
-	def getAllReadWrite : List[FieldPermissionChange] = {
+	def getAllReadWriteChanges : List[FieldPermissionChange] = {
 		List()
 	}
 }
