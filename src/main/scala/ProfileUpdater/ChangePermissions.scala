@@ -23,42 +23,48 @@ object XMLBuilder {
 }
 
 class Transformer(var changes : Seq[FieldPermissionChange]) {
-	def extractChangesUpTo(fieldNameFromFile : Option[String]) = {
+	def extractChangesUpTo(inputFieldName : Option[String]) = {
 		val (toCreate, other) = changes.partition(c => {
 			def objectName = c.objectName
 			def fieldName = c.fieldName
 			def fullName = s"$objectName.$fieldName"
 
-			fieldNameFromFile match {
+			inputFieldName match {
 				case Some(name) => fullName > name
 				case None => true
 			}
 		})
 
 		val result = toCreate.map(c => XMLBuilder.fieldPermissionXMLForChange(c))
+		println("extractChangesUpTo: ", toCreate, result)
 		changes = other
 
 		result
 	}
 
-	def applyChangeIfNeeded(n : Node, fieldName : String, children : NodeSeq) = {
-		val objectName = changes.head.objectName
-		val fieldName = changes.head.fieldName
-		val fullName = s"$objectName.$fieldName"
-
-		if (fieldName.equals(fullName)) {
-			val change = changes.head
-			val setWrite = change.setWrite.getOrElse((children \\ "editable").text)
-			val setRead = change.setRead.getOrElse((children \\ "readable").text)
-
-			val result = XMLBuilder.fieldPermissionXML(setWrite, fullName, setRead)
-			changes = changes.tail 
-
-			result
-		} else if (fieldName > fullName) {
-			extractChangesUpTo(Some(fieldName))
-		} else {
+	def applyChangeIfNeeded(n : Node, inputFieldName : String, children : NodeSeq) = {
+		if (changes.isEmpty) {
 			n
+		} else {
+			val objectName = changes.head.objectName
+			val fieldName = changes.head.fieldName
+			val fullName = s"$objectName.$fieldName"
+
+			if (inputFieldName.equals(fullName)) {
+				val change = changes.head
+				val setWrite = change.setWrite.getOrElse((children \\ "editable").text)
+				val setRead = change.setRead.getOrElse((children \\ "readable").text)
+
+				val result = XMLBuilder.fieldPermissionXML(setWrite, fullName, setRead)
+				println("applyChangeIfNeeded: ", result)
+				changes = changes.tail 
+
+				result
+			} else if (inputFieldName > fullName) {
+				extractChangesUpTo(Some(inputFieldName))
+			} else {
+				n
+			}
 		}
 	}
 }
@@ -74,7 +80,9 @@ class ChangePermissions(changes : Seq[FieldPermissionChange]) extends RewriteRul
 			n
 		}
 		case Elem(_prefix, "fieldPermissions", _attrs, _scope, children @ _*) => {
-			transformer.applyChangeIfNeeded(n, (children \\ "field").text, children)
+			val nx = transformer.applyChangeIfNeeded(n, (children \\ "field").text, children)
+			println(nx)
+			nx
 		}
 		case Elem(_prefix, "loginIpRanges", _attrs, _scope, _) => {
 			transformer.extractChangesUpTo(None)
