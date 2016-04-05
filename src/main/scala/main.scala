@@ -30,7 +30,7 @@ object ProfileUpdater {
 				val fieldChanges = config.objectNames.sorted
 					.map(on => new ObjectImporter(config.srcDir, on))
 					.flatMap(oi => modeOperator(oi))
-println(fieldChanges)
+
 				println(new RuleTransformer(new ChangePermissions(fieldChanges)).transform(oldXML))
 			}
 			case None => {}
