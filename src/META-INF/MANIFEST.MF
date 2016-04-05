@@ -1,0 +1,1 @@
+Main-Class: main.scala.ProfileUpdater.ProfileUpdater
