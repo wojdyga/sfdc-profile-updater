@@ -25,11 +25,32 @@ class ObjectImporter(srcDirPath : String, objectName : String) {
 		FieldPermissionChange(objectName, (n \\ "fullName").text, Some("true"), None)
 	}
 
+	def nonFormulaField(n : Node) : Boolean = {
+		(n \\ "formula").isEmpty
+	}
+
+	def nonSummaryField(n: Node): Boolean = {
+		!(n \\ "type").headOption.getOrElse(<type></type>).text.equals("Summary")
+	}
+
+	def isFieldWriteable(n : Node) : Boolean = {
+		nonFormulaField(n) && nonSummaryField(n)
+	}
+	def nodeToWriteable(n : Node) : FieldPermissionChange = {
+		FieldPermissionChange(objectName, (n \\ "fullName").text, Some("true"), Some("true"))
+	}
+
 	def getAllWriteableChanges : List[FieldPermissionChange] = {
-		List()
+		getAllAvailableFields.filter(isFieldWriteable).map(nodeToWriteable)
 	}
 
 	def getAllReadWriteChanges : List[FieldPermissionChange] = {
-		List()
+		getAllAvailableFields.map { n =>
+			if (isFieldWriteable(n)) {
+				nodeToWriteable(n)
+			} else {
+				nodeToReadable(n)
+			}
+		}
 	}
 }
