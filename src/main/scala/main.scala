@@ -4,9 +4,9 @@
  */
 package main.scala.ProfileUpdater
 
+import scala.io.Source
 import scala.xml._
 import scala.xml.transform._
-import scala.io.Source
 
 object ProfileUpdater {
 	def main(args : Array[String]) = {
@@ -19,6 +19,8 @@ object ProfileUpdater {
 						oi => oi.getAllWriteableChanges
 					} else if (config.mode.equals("setAllReadWrite")) {
 						oi => oi.getAllReadWriteChanges
+					} else if (config.mode.equals("clearEntries")) {
+						oi => oi.getClearEntries
 					} else {
 						oi => List()
 					}
@@ -32,11 +34,23 @@ object ProfileUpdater {
 
 				val transformer = new Transformer(fieldChanges)
 
-				val newXMLProfile = new RuleTransformer(new ChangePermissions(transformer)).transform(oldXML).head
+				val rewriteRule : RewriteRule = {
+					if (config.mode.equals("clearEntries")) {
+						new ClearPermissions(transformer)
+					} else {
+						new ChangePermissions(transformer)
+					}
+				}
 
-				val newNodes = transformer.getNodesForAllNotTransformedFields
+				val newXMLProfile = new RuleTransformer(rewriteRule).transform(oldXML).head
 
-				val allNodes = ProfileXMLMerger.merge(newXMLProfile, newNodes)
+				val allNodes = {
+					if (config.mode.equals("clearEntries")) {
+						newXMLProfile
+					} else {
+						ProfileXMLMerger.merge(newXMLProfile, transformer.getNodesForAllNotTransformedFields)
+					}
+				}
 
 				printProfile(allNodes)
 			}

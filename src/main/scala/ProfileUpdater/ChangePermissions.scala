@@ -1,6 +1,5 @@
 package main.scala.ProfileUpdater
 
-import scala.io.Source
 import scala.xml._
 import scala.xml.transform._
 

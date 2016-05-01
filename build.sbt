@@ -23,6 +23,8 @@ libraryDependencies := {
   }
 }
 
+scalacOptions ++= Seq("-unchecked", "-deprecation")
+
 libraryDependencies += "com.github.scopt" %% "scopt" % "3.4.0"
 
 proguardSettings
@@ -31,7 +33,7 @@ ProguardKeys.proguardVersion in Proguard := "5.2.1"
 
 ProguardKeys.options in Proguard := Seq(
 "-injars <user.dir>/target/scala-2.11/sfdc-profile-updater_2.11-0.1.jar",
-"-injars <user.home>/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.11.7.jar",
+"-injars <user.home>/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.11.7.jar(!META-INF/MANIFEST.MF)",
 "-libraryjars <java.home>/lib/rt.jar",
 "-outjars <user.dir>/target/scala-2.11/proguard/sfdc-profile-updater-2.11-0.1.jar",
 "-dontnote", 

@@ -1,13 +1,13 @@
 package main.scala.ProfileUpdater
 
-import scala.xml._
 import scala.io.Source
+import scala.xml._
 
 case class FieldPermissionChange(objectName : String, fieldName : String, setRead : Option[String], setWrite : Option[String])
 
 class ObjectImporter(srcDirPath : String, objectName : String) {
 	private def getAllAvailableFields = {
-		(XML.loadString(Source.fromFile(srcDirPath + "/objects/" + objectName + ".object").mkString) \\ "fields").filter(nonRequiredFields).toList
+		(XML.loadString(Source.fromFile(srcDirPath + "/objects/" + objectName + ".object").mkString) \\ "fields").toList
 	}
 
 	private def nonRequiredFields(n : Node) : Boolean = {
@@ -18,7 +18,7 @@ class ObjectImporter(srcDirPath : String, objectName : String) {
 	}
 
 	def getAllReadableChanges : List[FieldPermissionChange] = {
-		getAllAvailableFields.map(n => nodeToReadable(n))
+		getAllAvailableFields.filter(nonRequiredFields).map(n => nodeToReadable(n))
 	}
 
 	private def nodeToReadable(n : Node) : FieldPermissionChange = {
@@ -41,16 +41,23 @@ class ObjectImporter(srcDirPath : String, objectName : String) {
 	}
 
 	def getAllWriteableChanges : List[FieldPermissionChange] = {
-		getAllAvailableFields.filter(isFieldWriteable).map(nodeToWriteable)
+		getAllAvailableFields.filter(nonRequiredFields).filter(isFieldWriteable).map(nodeToWriteable)
 	}
 
 	def getAllReadWriteChanges : List[FieldPermissionChange] = {
-		getAllAvailableFields.map { n =>
+		getAllAvailableFields.filter(nonRequiredFields).map { n =>
 			if (isFieldWriteable(n)) {
 				nodeToWriteable(n)
 			} else {
 				nodeToReadable(n)
 			}
 		}
+	}
+
+	private def nodeToField(n : Node) : FieldPermissionChange =
+		FieldPermissionChange(objectName, (n \\ "fullName").text, None, None)
+
+	def getClearEntries : List[FieldPermissionChange] = {
+		getAllAvailableFields map nodeToField
 	}
 }

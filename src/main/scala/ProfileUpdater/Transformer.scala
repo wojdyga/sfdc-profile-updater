@@ -1,13 +1,16 @@
 package main.scala.ProfileUpdater
 
 import scala.xml._
-import scala.xml.transform._
 
 class Transformer(changes : Seq[FieldPermissionChange]) {
 	val changeForField = scala.collection.mutable.Map[String, FieldPermissionChange]()
-	changes.map(c => changeForField(c.objectName+"."+c.fieldName) = c)
+	changes.map(c => changeForField(objectWithFieldName(c.objectName,c.fieldName)) = c)
 
 	val fieldsTransformed = scala.collection.mutable.Set[String]()
+
+	def objectWithFieldName(objectName : String, fieldName : String) = objectName+"."+fieldName
+
+	def isGoingToTransform(fullName : String) = changeForField.contains(fullName)
 
 	def getTransformedNode(n : Node, inputFieldName : String, children : NodeSeq) = {
 		if (! changeForField.contains(inputFieldName)) {
@@ -16,7 +19,7 @@ class Transformer(changes : Seq[FieldPermissionChange]) {
 			val change = changeForField(inputFieldName)
 			val setWrite = change.setWrite.getOrElse((children \\ "editable").text)
 			val setRead = change.setRead.getOrElse((children \\ "readable").text)
-			val fullName = change.objectName + "." + change.fieldName
+			val fullName = objectWithFieldName(change.objectName, change.fieldName)
 			fieldsTransformed += fullName
 			val result = XMLBuilder.fieldPermissionXML(setWrite, fullName, setRead)
 
@@ -39,7 +42,7 @@ object ProfileXMLMerger {
 	def merge(profile : Node, fieldPermissions : NodeSeq) = {
 		profile match {
 			case Elem(prefix, label, attribs, scope, child @ _*) =>
-				Elem(prefix, label, attribs, scope, mergeNodeSeqs(child, fieldPermissions) : _*)
+				Elem(prefix, label, attribs, scope, false, mergeNodeSeqs(child, fieldPermissions) : _*)
 		}
 	}
 
