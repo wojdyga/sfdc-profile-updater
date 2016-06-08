@@ -12,6 +12,7 @@ object ConfigurationParser {
 		cmd("setAllReadable") action { (_, c) => c.copy(mode = "setAllReadable") } text("setAllReadable sets all fields as readable (where appropriate)")
 		cmd("setAllWriteable") action { (_, c) => c.copy(mode = "setAllWriteable") } text("setAllReadable sets all fields as writeable (where appropriate)")
 		cmd("setAllReadWrite") action { (_, c) => c.copy(mode = "setAllReadWrite") } text("setAllReadWrite sets all fields as readable and writeable (where appropriate)")
+		cmd("setAllNoAccess") action { (_, c) => c.copy(mode = "setAllNoAccess") } text("setAllNoAccess sets all fields as not readable (where appropriate)")
 		cmd("clearEntries") action { (_, c) => c.copy(mode = "clearEntries") } text("clearEntries delete entries for all fields for given objects")
 	}
 

@@ -54,6 +54,14 @@ class ObjectImporter(srcDirPath : String, objectName : String) {
 		}
 	}
 
+	def getAllNoAccessChanges : List[FieldPermissionChange] = {
+		getAllAvailableFields.filter(nonRequiredFields).map(nodeToNoAccess)
+	}
+
+	private def nodeToNoAccess(n : Node) = {
+		FieldPermissionChange(objectName, (n \\ "fullName").text, Some("false"), Some("false"))
+	}
+
 	private def nodeToField(n : Node) : FieldPermissionChange =
 		FieldPermissionChange(objectName, (n \\ "fullName").text, None, None)
 

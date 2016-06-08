@@ -21,6 +21,8 @@ object ProfileUpdater {
 						oi => oi.getAllReadWriteChanges
 					} else if (config.mode.equals("clearEntries")) {
 						oi => oi.getClearEntries
+					} else if (config.mode.equals("setAllNoAccess")) {
+						oi => oi.getAllNoAccessChanges
 					} else {
 						oi => List()
 					}
