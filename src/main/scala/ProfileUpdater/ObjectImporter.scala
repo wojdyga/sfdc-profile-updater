@@ -22,7 +22,7 @@ class ObjectImporter(srcDirPath : String, objectName : String) {
 	}
 
 	private def nodeToReadable(n : Node) : FieldPermissionChange = {
-		FieldPermissionChange(objectName, (n \\ "fullName").text, Some("true"), None)
+		FieldPermissionChange(objectName, (n \ "fullName").text, Some("true"), None)
 	}
 
 	def nonFormulaField(n : Node) : Boolean = {
@@ -37,7 +37,7 @@ class ObjectImporter(srcDirPath : String, objectName : String) {
 		nonFormulaField(n) && nonSummaryField(n)
 	}
 	def nodeToWriteable(n : Node) : FieldPermissionChange = {
-		FieldPermissionChange(objectName, (n \\ "fullName").text, Some("true"), Some("true"))
+		FieldPermissionChange(objectName, (n \ "fullName").text, Some("true"), Some("true"))
 	}
 
 	def getAllWriteableChanges : List[FieldPermissionChange] = {
@@ -59,11 +59,11 @@ class ObjectImporter(srcDirPath : String, objectName : String) {
 	}
 
 	private def nodeToNoAccess(n : Node) = {
-		FieldPermissionChange(objectName, (n \\ "fullName").text, Some("false"), Some("false"))
+		FieldPermissionChange(objectName, (n \ "fullName").text, Some("false"), Some("false"))
 	}
 
 	private def nodeToField(n : Node) : FieldPermissionChange =
-		FieldPermissionChange(objectName, (n \\ "fullName").text, None, None)
+		FieldPermissionChange(objectName, (n \ "fullName").text, None, None)
 
 	def getClearEntries : List[FieldPermissionChange] = {
 		getAllAvailableFields map nodeToField

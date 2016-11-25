@@ -92,6 +92,95 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Status</fullName>
+        <picklist>
+            <picklistValues>
+                <fullName>New</fullName>
+                <default>true</default>
+                <closed>false</closed>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Open</fullName>
+                <default>false</default>
+                <closed>false</closed>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Pending customer</fullName>
+                <default>false</default>
+                <closed>false</closed>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Pending internal dept</fullName>
+                <default>false</default>
+                <closed>false</closed>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Pending 3rd party</fullName>
+                <default>false</default>
+                <closed>false</closed>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Pending resolution</fullName>
+                <default>false</default>
+                <closed>false</closed>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Resolved</fullName>
+                <default>false</default>
+                <closed>false</closed>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Closed</fullName>
+                <default>false</default>
+                <closed>true</closed>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>true</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Sub_Status__c</fullName>
+        <description>The sub-status of the ticket</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The sub-status of the ticket</inlineHelpText>
+        <label>Sub-Status</label>
+        <picklist>
+            <controllingField>Status</controllingField>
+            <picklistValues>
+                <fullName>Customer on leave</fullName>
+                <default>false</default>
+                <controllingFieldValues>Pending customer</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Customer budget code</fullName>
+                <default>false</default>
+                <controllingFieldValues>Pending customer</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Awaiting quote</fullName>
+                <default>false</default>
+                <controllingFieldValues>Pending 3rd party</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Out of stock</fullName>
+                <default>false</default>
+                <controllingFieldValues>Pending 3rd party</controllingFieldValues>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Awaiting delivery</fullName>
+                <default>false</default>
+                <controllingFieldValues>Pending 3rd party</controllingFieldValues>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+    </fields>
+    <fields>
         <fullName>Title__c</fullName>
         <externalId>false</externalId>
         <inlineHelpText>Title of the project</inlineHelpText>
